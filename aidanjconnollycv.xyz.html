@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>electrician · refined · directional zoom · 4‑col gallery</title>
+    <style>
+        /* ------ clean, grey, dob inline, licenses left, hover reveal no mono ------ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* normal cursor */
+        body, button, .skill-tag, a, .clickable {
+            cursor: auto;
+        }
+
+        body {
+            background: #1c1c1c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+            line-height: 1.5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Text', 'Helvetica Neue', 'Arial', sans-serif;
+            font-weight: 400;
+            font-size: 0.95rem;
+            color: #e0e0e0;
+        }
+
+        .resume {
+            max-width: 1120px;
+            width: 100%;
+            background-color: #f5f5f5;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.65), 0 0 0 1px #6b6b6b inset;
+            display: grid;
+            grid-template-columns: 34% 66%;
+            border-radius: 0px;
+            overflow: hidden;
+        }
+
+        /* ---------- LEFT PANEL ---------- */
+        .left-panel {
+            background-color: #262626;
+            padding: 2rem 1.8rem;
+            border-right: 1px solid #4a4a4a;
+            color: #c9c9c9;
+        }
+
+        .profile-header {
+            margin-bottom: 1.8rem;
+        }
+
+        .name {
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: #f0f0f0;
+            line-height: 1.1;
+            margin-bottom: 0.2rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', sans-serif;
+            font-weight: 650;
+            text-transform: uppercase;
+        }
+
+        .title-row {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 0.2rem;
+        }
+
+        .title {
+            font-size: 1rem;
+            font-weight: 450;
+            color: #dddddd;
+            background: transparent;
+            padding: 0;
+            border-left: none;
+            letter-spacing: 0.5px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+            text-transform: none;
+        }
+
+        .header-dob {
+            font-size: 0.85rem;
+            color: #b3b3b3;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .Address {
+            font-size: 0.85rem;
+            color: #b3b3b3;
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2.2px;
+            font-weight: 600;
+            color: #b3b3b3;
+            margin: 2rem 0 1rem 0;
+            border-bottom: 1px solid #555555;
+            padding-bottom: 0.5rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+        }
+
+        .contact-item {
+            font-size: 0.92rem;
+            color: #d4d4d4;
+            margin-bottom: 0.6rem;
+            font-weight: 400;
+        }
+
+        .edu-entry {
+            margin-bottom: 1.3rem;
+        }
+
+        .edu-degree {
+            font-weight: 600;
+            color: #eaeaea;
+            font-size: 1rem;
+        }
+
+        .edu-school {
+            font-size: 0.88rem;
+            color: #c0c0c0;
+            margin: 0.2rem 0 0.2rem;
+            font-style: italic;
+        }
+
+        .edu-date {
+            font-size: 0.8rem;
+            color: #9e9e9e;
+            font-weight: 400;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.2rem;
+        }
+
+        .skill-tag {
+            background-color: #363636;
+            border: 1px solid #5a5a5a;
+            padding: 0.3rem 1rem;
+            font-size: 0.82rem;
+            border-radius: 5px;
+            color: #dfdfdf;
+            font-weight: 420;
+            transition: 0.1s;
+        }
+
+        .skill-tag:hover {
+            background-color: #505050;
+            border-color: #9c9c9c;
+            color: #f5f5f5;
+        }
+
+        /* ----- LICENSES (left) with hover reveal, no monochrome ----- */
+        .left-licenses {
+            margin-top: 2rem;
+        }
+
+        .license-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+            background: #2f2f2f;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #4a4a4a;
+            transition: background 0.15s;
+            cursor: default;
+        }
+
+        .license-item:hover {
+            background: #3c3c3c;
+            border-color: #7a7a7a;
+        }
+
+        /* image slot: hidden by default, visible only on hover */
+        .license-img-slot {
+            width: 70px;
+            height: 50px;
+            background-color: #3d3d3d;
+            border-radius: 5px;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 1px solid #6a6a6a;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+
+        .license-item:hover .license-img-slot {
+            opacity: 1;
+        }
+
+        .license-img-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: none;
+            -webkit-filter: none;
+        }
+
+        .license-info {
+            flex: 1;
+        }
+
+        .license-name {
+            font-weight: 550;
+            font-size: 0.9rem;
+            color: #e6e6e6;
+            letter-spacing: 0.2px;
+            line-height: 1.3;
+        }
+
+        .license-date {
+            font-size: 0.75rem;
+            color: #a8a8a8;
+            font-style: italic;
+            margin-top: 0.1rem;
+        }
+
+        /* right panel */
+        .right-panel {
+            background-color: #fafafa;
+            padding: 2rem 2.2rem;
+            color: #2b2b2b;
+        }
+
+        .right-section-title {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            font-weight: 600;
+            color: #5f5f5f;
+            border-bottom: 1.5px solid #c2c2c2;
+            padding-bottom: 0.4rem;
+            margin: 1.5rem 0 1.2rem 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+        }
+
+        .right-section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .summary-text {
+            font-size: 0.98rem;
+            color: #333333;
+            margin-bottom: 0.5rem;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .exp-item {
+            margin-bottom: 2rem;
+        }
+
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 1.0rem;
+        }
+
+        .exp-role {
+            font-weight: 650;
+            font-size: 1.05rem;
+            background-color:#7a7a7a;
+            padding: 0.2rem 0.8rem;
+            border-radius: 5px;
+            color: #e2e2e2;
+            letter-spacing: -0.01em;
+        }
+
+        .exp-company {
+            font-weight: 500;
+            color: #5f5f5f;
+            font-size: 0.98rem;
+            font-style: italic;
+            display: inline-flex;
+            margin-left: .75rem;
+        }
+
+        .exp-company-date {
+            font-size: 0.8rem;
+            color: #7a7a7a;
+            margin-left: 0.5rem;
+        }
+
+        .exp-date {
+            font-size: 0.78rem;
+            color: #6e6e6e;
+            background: #e2e2e2;
+            padding: 0.2rem 0.8rem;
+            border-radius: 5px;
+            font-weight: 520;
+            letter-spacing: 0.4px;
+        }
+
+        .exp-desc {
+            list-style: none;
+            margin-top: 0.7rem;
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .exp-desc li {
+            font-size: 0.9rem;
+            color: #404040;
+            margin-bottom: 0.45rem;
+            display: flex;
+            gap: 0.7rem;
+        }
+
+        .exp-desc li::before {
+            content: "—";
+            color: #8f8f8f;
+            font-weight: 300;
+            letter-spacing: -1px;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #cccccc;
+            margin: 0.5rem 0 1.2rem;
+        }
+
+        /* ---------- PROJECT GALLERY – 4 columns, bigger cells, centered ---------- */
+        .grid-section-title {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            font-weight: 600;
+            color: #5f5f5f;
+            border-bottom: 1.5px solid #c2c2c2;
+            padding-bottom: 0.4rem;
+            margin: 2rem 0 1.2rem 0;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);  /* max 4 per row */
+            gap: 1.2rem;
+            margin: 1.5rem 0 1rem;
+            justify-content: center;
+        }
+
+        .grid-item {
+            aspect-ratio: 1 / 1;
+            background: #eaeaea;
+            border: 2px solid #b0b0b0;
+            border-radius: 10px;          /* slightly larger radius for bigger look */
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            width: 100%;                   /* take full column width */
+            max-width: 180px;              /* but cap size for consistency */
+            justify-self: center;           /* center each cell within its column */
+        }
+
+        .grid-item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+            border-color: #7a7a7a;
+        }
+
+        .grid-item:active {
+            transform: scale(0.98);
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+        }
+
+        /* placeholder for missing images */
+        .grid-item img[src=""] {
+            background: #ccc;
+            content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23cccccc"/><text x="10" y="55" font-family="Arial" font-size="14" fill="%23666">📷</text></svg>');
+        }
+
+        /* ---------- OVERLAY with directional zoom (click counts) ---------- */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(20, 20, 20, 0.98);
+            backdrop-filter: blur(1.5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.2s ease;
+            cursor: auto;
+            flex-direction: column;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .overlay-content {
+            max-width: 85vw;
+            max-height: 70vh;
+            border: 6px solid #4d4d4d;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.6);
+            background: #2a2a2a;
+            padding: 4px;
+            border-radius: 5px;
+            transition: transform 0.1s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .overlay-content img {
+            width: 100%;
+            height: auto;
+            max-height: 70vh;
+            display: block;
+            border: 1px solid #7a7a7a;
+            filter: none;
+            border-radius: 3px;
+            transition: transform 0.1s ease;
+            transform-origin: center center;
+            cursor: zoom-in;
+        }
+
+        /* zoom controls removed – now using click-count zoom */
+        .close-hint {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: #cfcfcf;
+            font-size: 3rem;
+            font-weight: 300;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            text-shadow: 3px 3px 0 #2b2b2b;
+            transition: 0.15s;
+            z-index: 1010;
+            line-height: 1;
+        }
+
+        .close-hint:hover {
+            color: #ffffff;
+        }
+
+        /* click counter indicator (optional but helpful) */
+        .click-indicator {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-family: monospace;
+            z-index: 1020;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 750px) {
+            .resume {
+                grid-template-columns: 1fr;
+            }
+            .left-panel {
+                border-right: none;
+                border-bottom: 1px solid #4a4a4a;
+            }
+            .image-grid {
+                grid-template-columns: repeat(3, 1fr); /* 3 cols on tablets */
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .image-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 cols on phones */
+            }
+        }
+
+        @media print {
+            body { background: none; padding: 0.2in; }
+            .resume { box-shadow: none; border: 1px solid #777; background: white; }
+            .left-panel { background-color: #eee; color: black; }
+            .name { color: black; }
+            .license-img-slot { opacity: 1 !important; border: 1px solid #333; }
+            .overlay, .image-grid { display: none; }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="resume">
+        <!-- LEFT PANEL with hover‑reveal images, full colour -->
+        <div class="left-panel">
+            <div class="profile-header">
+                <div class="name">Aidan Connolly</div>
+                <div class="title-row">
+                    <span class="header-dob">25 Nov 2003</span>
+                    <span class="Address">Enmore, NSW</span>
+                </div>
+            </div>
+            
+            <div class="section-title">CONTACT</div>
+            <div class="contact-item">aidanjconnolly3@gmail.com</div>
+            <div class="contact-item">+61 434 996 723</div>
+        
+            <div class="section-title">EDUCATION</div>
+            <div class="edu-entry">
+                <div class="edu-degree">HSC</div>
+                <div class="edu-school">Blackwattle Bay High School</div>
+                <div class="edu-date">2016 – 2021</div>
+            </div>
+            <div class="edu-entry">
+                <div class="edu-degree">Certificate III Electrotechnology</div>
+                <div class="edu-school">Ultimo TAFE</div>
+                <div class="edu-date">2022 – 2025</div>
+            </div>
+
+            <div class="section-title">SKILLS + QUALITIES</div>
+            <div class="skill-tags">
+                <span class="skill-tag">Complex schematic interpretation</span>
+                <span class="skill-tag">Process-orientated/efficiency minded</span>
+                <span class="skill-tag">Innovative and adaptable</span>
+                <span class="skill-tag">Tenacious</span>
+                <span class="skill-tag">Systems thinker/reductionist</span>
+                <span class="skill-tag">Fault finding/root cause analysis</span>
+                <span class="skill-tag">Receptive and diplomatic</span>
+                <span class="skill-tag">Lucid communicator</span>
+                <span class="skill-tag">Practically proficient/Manually dexterous</span>
+            </div>
+            
+            <!-- LICENSES with hover-only images -->
+            <div class="section-title">LICENSES</div>
+            <div class="left-licenses">
+                <div class="license-item">
+                    <div class="license-info">
+                        <div class="license-name">Electrical Contractor License</div>
+                        <div class="license-date">2025-2030</div>
+                    </div>
+                    <span class="license-img-slot">
+                        <img src="IMG_2175.jpg" alt="Electrical Contractor License">
+                    </span>
+                </div>
+                <div class="license-item">
+                    <div class="license-info">
+                        <div class="license-name">NSW White Card</div>
+                    </div>
+                    <span class="license-img-slot">
+                        <img src="IMG_2359.jpg" alt="NSW White Card">
+                    </span>
+                </div>
+                <div class="license-item">
+                     <div class="license-info">
+                        <div class="license-name">Drivers License</div>
+                    </div>
+                    <span class="license-img-slot">
+                        <img src="IMG_2358.jpg" alt="P2 Drivers License">
+                    </span>
+                </div>
+            </div>
+            <div style="margin-top: 1rem;"></div>
+        </div>
+        
+        <!-- RIGHT PANEL with 4‑col gallery -->
+        <div class="right-panel">
+            <div class="right-section-title">PROFILE</div>
+            <div class="summary-text">
+              Strategic electrician with hands-on experience in commercial, industrial, and switchboard manufacturing. Seeking to leverage my technical expertise, problem-solving skills, and leadership abilities to contribute to complex projects and drive innovation in the electrical industry.
+            </div>
+            
+            <div class="right-section-title">EXPERIENCE</div>
+            
+            <div class="exp-item">
+                <div class="exp-header">
+                    <span class="exp-role">Electrical Apprentice</span>
+                    <span class="exp-date">Sep 2021 – Nov 2025 </span>
+                </div>
+                <div class="exp-company">Electromaster <span class="exp-company-date">[Sep 2021 - Dec 2022]</span> </div>
+                <ul class="exp-desc">
+                    <li>Learnt the fundamentals of electrical installations, gaining experience in wiring, circuitry, and safety protocols.</li>
+                    <li>Became proficient with power tools, hand tools and installing wiring systems (cable tray, conduit, cable management).</li>
+                    <li>Established a strong understanding of ideal aesthetics in electrical installations.</li>
+                </ul>
+                <div class="exp-company">TES <span class="exp-company-date">[Jan 2023 – Nov 2025]</span></div>
+                <ul class="exp-desc">
+                    <li>Gained experience in commercial and industrial electrical work, including switchboard installations, motor wiring, and lighting/power systems.</li>
+                    <li>Developed strong problem-solving skills through fault finding and troubleshooting electrical issues on-site.</li>
+                    <li>Worked collaboratively with senior electricians and other trades to complete projects efficiently to high standards whilst developing a strong proficiency of interpreting the AS/NZS 3000 (Wiring Rules) and other relevant standards.</li>
+                    <li>Started working in my companies Switchboard manufacturing workshop, gaining quality experience in assembly and testing of switchboards.</li>
+                </ul>
+            </div>
+
+            <div class="exp-item">
+                <div class="exp-header">
+                    <span class="exp-role">Electrician</span>
+                    <span class="exp-date">Nov 2025 – Present </span>
+                </div>
+                <div class="exp-company">TES <span class="exp-company-date">[Nov 2025 – Present]</span></div>
+                <ul class="exp-desc">
+                    <li>Promoted to Electrician after obtaining my Electrical Contractor License, taking on more responsibility and leading projects.</li>
+                    <li>Improved methodology to increase efficiency and reduce errors in electrical installations.</li>
+                    <li>Mentored junior apprentices, sharing knowledge and best practices to help them develop their skills.</li>
+                    <li>Continuously updated my knowledge of industry standards and regulations to ensure compliance and safety on all projects.</li>
+                </ul>
+            </div>
+
+            <!-- PROJECT GALLERY – 4 columns, bigger cells -->
+            <div class="grid-section-title">PROJECT GALLERY</div>
+            <div class="image-grid" id="projectGrid">
+                <div class="grid-item"><img src="IMG_1238.jpg" alt="Switchboard assembly"></div>
+                <div class="grid-item"><img src="IMG_2257.PNG" alt="Switchboard assembly"></div>
+                <div class="grid-item"><img src="IMG_2335 (1).jpg" alt="Switchboard assembly"></div>
+                <div class="grid-item"><img src="IMG_2256.PNG" alt="Switchboard assembly"></div>
+              
+            </div>
+            
+            <hr>
+            <div style="margin-top: 1.2rem; font-size: 0.78rem; color: #8f8f8f; border-top: 1px solid #d4d4d4; padding-top: 0.8rem; text-align: right;">
+                updated · april 2025
+            </div>
+        </div>
+    </div>
+
+    <!-- OVERLAY with click‑count zoom (1‑3 zoom in toward cursor, 4‑6 zoom out centered) -->
+    <div class="overlay" id="imageOverlay">
+        <span class="close-hint" id="closeOverlayBtn">✕</span>
+        <div class="overlay-content" id="overlayContent">
+            <img src="" alt="" id="overlayImg">
+        </div>
+        <div class="click-indicator" id="clickIndicator">clicks: 0</div>
+    </div>
+
+    <script>
+        (function() {
+            const overlay = document.getElementById('imageOverlay');
+            const overlayImg = document.getElementById('overlayImg');
+            const closeBtn = document.getElementById('closeOverlayBtn');
+            const overlayContent = document.getElementById('overlayContent');
+            const clickIndicator = document.getElementById('clickIndicator');
+
+            // license + grid items
+            const imgSlots = document.querySelectorAll('.license-img-slot');
+            const gridItems = document.querySelectorAll('.grid-item');
+
+            // Zoom state
+            let clickCount = 0;
+            const scaleStep = 0.4;          // zoom in/out amount
+            const maxScale = 2.8;
+            const minScale = 0.8;
+            let currentScale = 1;
+            let currentOriginX = 50;         // default center (percent)
+            let currentOriginY = 50;
+
+            function resetZoom() {
+                currentScale = 1;
+                currentOriginX = 50;
+                currentOriginY = 50;
+                overlayImg.style.transformOrigin = `${currentOriginX}% ${currentOriginY}%`;
+                overlayImg.style.transform = `scale(${currentScale})`;
+                clickCount = 0;
+                clickIndicator.textContent = 'clicks: 0';
+            }
+
+            function openOverlay(src, altText) {
+                if (!src) return;
+                overlayImg.src = src;
+                overlayImg.alt = altText || 'enlarged view';
+                overlay.classList.add('active');
+                resetZoom();
+            }
+
+            // Helper to get click position relative to image (percent)
+            function getClickOrigin(e) {
+                const rect = overlayImg.getBoundingClientRect();
+                if (rect.width === 0) return { x: 50, y: 50 };
+                
+                // Calculate click coordinates relative to image bounds
+                let clickX = e.clientX - rect.left;
+                let clickY = e.clientY - rect.top;
+                
+                // Constrain to image area
+                clickX = Math.max(0, Math.min(rect.width, clickX));
+                clickY = Math.max(0, Math.min(rect.height, clickY));
+                
+                // Convert to percentage
+                const originX = (clickX / rect.width) * 100;
+                const originY = (clickY / rect.height) * 100;
+                
+                return { x: originX, y: originY };
+            }
+
+            // Click handler on image for zoom
+            overlayImg.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                // Prevent zoom if overlay is not active
+                if (!overlay.classList.contains('active')) return;
+                
+                clickCount++;
+                
+                // Reset counter after 6 to keep cycle intuitive (1-3 zoom in, 4-6 zoom out)
+                if (clickCount > 6) clickCount = 1;
+                
+                clickIndicator.textContent = `clicks: ${clickCount}`;
+
+                if (clickCount >= 1 && clickCount <= 3) {
+                    // ZOOM IN toward cursor (1st, 2nd, 3rd click)
+                    const origin = getClickOrigin(e);
+                    currentOriginX = origin.x;
+                    currentOriginY = origin.y;
+                    
+                    // Increase scale, but not beyond max
+                    let newScale = currentScale + scaleStep;
+                    if (newScale > maxScale) newScale = maxScale;
+                    
+                    currentScale = newScale;
+                    
+                    // Apply transform origin and scale
+                    overlayImg.style.transformOrigin = `${currentOriginX}% ${currentOriginY}%`;
+                    overlayImg.style.transform = `scale(${currentScale})`;
+                    
+                } else if (clickCount >= 4 && clickCount <= 6) {
+                    // ZOOM OUT centered (4th, 5th, 6th click)
+                    // Reset origin to center each time
+                    currentOriginX = 50;
+                    currentOriginY = 50;
+                    
+                    let newScale = currentScale - scaleStep;
+                    if (newScale < minScale) newScale = minScale;
+                    
+                    currentScale = newScale;
+                    
+                    overlayImg.style.transformOrigin = '50% 50%';
+                    overlayImg.style.transform = `scale(${currentScale})`;
+                }
+                
+                // Small visual feedback
+                this.style.transition = 'transform 0.1s ease';
+            });
+
+            // license slots click
+            imgSlots.forEach(slot => {
+                slot.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const innerImg = this.querySelector('img');
+                    if (innerImg) {
+                        openOverlay(innerImg.src, innerImg.alt);
+                    }
+                });
+                slot.style.cursor = 'pointer';
+            });
+
+            // project grid click
+            gridItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    const innerImg = this.querySelector('img');
+                    if (innerImg && innerImg.src) {
+                        openOverlay(innerImg.src, innerImg.alt);
+                    }
+                });
+            });
+
+            // close overlay
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay || e.target === closeBtn || e.target.closest('#closeOverlayBtn')) {
+                    overlay.classList.remove('active');
+                    overlayImg.src = '';
+                }
+            });
+
+            // keyboard escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && overlay.classList.contains('active')) {
+                    overlay.classList.remove('active');
+                    overlayImg.src = '';
+                }
+            });
+
+            // prevent clicks inside content from closing
+            overlayContent.addEventListener('click', (e) => e.stopPropagation());
+        })();
+    </script>
+</body>
+</html>
