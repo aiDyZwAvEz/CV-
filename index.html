@@ -28,6 +28,35 @@
             font-weight: 400;
             font-size: 0.95rem;
             color: #e0e0e0;
+            position: relative; /* for print button positioning */
+        }
+
+        /* PRINT BUTTON – top right corner */
+        .print-button {
+            position: fixed;
+            top: 1.2rem;
+            right: 1.2rem;
+            background: #3a3a3a;
+            color: #eaeaea;
+            border: 1px solid #7a7a7a;
+            padding: 0.5rem 1.3rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            z-index: 1100;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+            transition: background 0.1s ease, border-color 0.1s ease;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            background: rgba(50,50,50,0.9);
+            border-color: #8a8a8a;
+        }
+
+        .print-button:hover {
+            background: #525252;
+            border-color: #b0b0b0;
+            color: white;
         }
 
         .resume {
@@ -115,6 +144,17 @@
             color: #d4d4d4;
             margin-bottom: 0.6rem;
             font-weight: 400;
+        }
+
+        /* email & phone hyperlink colour */
+        .contact-link {
+            color: #b3b3b3;
+            text-decoration: none;
+            border-bottom: 1px dotted #6a6a6a;
+        }
+        .contact-link:hover {
+            color: #f0f0f0;
+            border-bottom: 1px solid #b3b3b3;
         }
 
         .edu-entry {
@@ -268,12 +308,14 @@
             margin-bottom: 2rem;
         }
 
+        /* --- FLEX SHRINK / WRAP IMPROVEMENT for mobile/tablet --- */
         .exp-header {
             display: flex;
             width: 100%;
             justify-content: space-between;
             align-items: baseline;
-            flex-wrap: nowrap;
+            flex-wrap: wrap;         /* allows wrapping on small screens */
+            gap: 0.5rem 0.8rem;      /* consistent spacing when wrapped */
             margin-bottom: 1.0rem;
         }
 
@@ -285,6 +327,7 @@
             border-radius: 5px;
             color: #e2e2e2;
             letter-spacing: -0.01em;
+            flex-shrink: 0;           /* prevent role from squishing */
         }
 
         .exp-company {
@@ -294,12 +337,14 @@
             font-style: italic;
             display: inline-flex;
             margin-left: .75rem;
+            flex-wrap: wrap;
         }
 
         .exp-company-date {
             font-size: 0.8rem;
             color: #7a7a7a;
             margin-left: 0.5rem;
+            white-space: nowrap;
         }
 
         .exp-date {
@@ -310,6 +355,7 @@
             border-radius: 5px;
             font-weight: 520;
             letter-spacing: 0.4px;
+            flex-shrink: 0;            /* keep date from shrinking too much */
         }
 
         .exp-desc {
@@ -494,11 +540,18 @@
                 grid-template-columns: repeat(3, 1fr); /* 3 cols on tablets */
                 gap: 1rem;
             }
+            /* additional breathing for exp-header on smaller screens */
+            .exp-header {
+                gap: 0.6rem;
+            }
         }
 
         @media (max-width: 480px) {
             .image-grid {
                 grid-template-columns: repeat(2, 1fr); /* 2 cols on phones */
+            }
+            .exp-company {
+                margin-left: 0;  /* reset margin on tight screens */
             }
         }
 
@@ -508,7 +561,7 @@
             .left-panel { background-color: #eee; color: black; }
             .name { color: black; }
             .license-img-slot { opacity: 1 !important; border: 1px solid #333; }
-            .overlay, .image-grid { display: none; }
+            .overlay, .image-grid, .print-button { display: none; }
         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -516,6 +569,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- PRINT BUTTON – fixed top right -->
+    <button class="print-button" onclick="window.print()">🖨️ Print CV</button>
+
     <div class="resume">
         <!-- LEFT PANEL with hover‑reveal images, full colour -->
         <div class="left-panel">
@@ -528,8 +584,14 @@
             </div>
             
             <div class="section-title">CONTACT</div>
-            <div class="contact-item">aidanjconnolly3@gmail.com</div>
-            <div class="contact-item">+61 434 996 723</div>
+            <!-- email as hyperlink, colour #b3b3b3 -->
+            <div class="contact-item">
+                <a href="mailto:aidanjconnolly3@gmail.com" class="contact-link">aidanjconnolly3@gmail.com</a>
+            </div>
+            <!-- phone already a tel link, colour set to #b3b3b3 -->
+            <div class="contact-item">
+                <a href="tel:+61434996723" class="contact-link">+61 434 996 723</a>
+            </div>
         
             <div class="section-title">EDUCATION</div>
             <div class="edu-entry">
