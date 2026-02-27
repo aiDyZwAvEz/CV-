@@ -31,45 +31,35 @@
             position: relative;
         }
 
-        /* PRINT BUTTON – top right corner */
+        /* PRINT BUTTON – now just the PNG with no styling */
         .print-button {
             position: fixed;
             top: 1.2rem;
             right: 1.2rem;
-            background: #3a3a3a;
-            color: #eaeaea;
-            border: 1px solid #7a7a7a;
-            padding: 0.5rem 1.3rem;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: 0.3px;
             z-index: 1100;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-            transition: background 0.1s ease, border-color 0.1s ease;
             cursor: pointer;
-            backdrop-filter: blur(4px);
-            background: rgba(50,50,50,0.9);
-            border-color: #8a8a8a;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            border: none;
+            background: transparent;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+            backdrop-filter: none;
+            display: block;
         }
 
         .print-button:hover {
-            background: #525252;
-            border-color: #b0b0b0;
-            color: white;
+            background: transparent;
+            border: none;
+            box-shadow: none;
         }
 
-        /* ===== PRINT ICON SLOT - SIMPLIFIED - NO FILTERS ===== */
+        /* ===== PRINT ICON - PURE PNG, NO EXTRA STYLING ===== */
         .print-icon {
-            width: 18px;
-            height: 18px;
-            object-fit: contain;
+            width: 32px;  /* Adjust this to your preferred size */
+            height: 32px; /* Adjust this to your preferred size */
             display: block;
         }
-        /* ===== END PRINT ICON SLOT ===== */
+        /* ===== END PRINT ICON ===== */
 
         .resume {
             max-width: 1120px;
@@ -577,13 +567,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- PRINT BUTTON – fixed top right -->
-    <!-- ===== PNG PRINT ICON SLOT - UPDATE THIS PATH TO YOUR ACTUAL PNG ===== -->
-    <button class="print-button" onclick="window.print()">
-        <img src="./assets/YOUR_PRINT_ICON_FILENAME.png" alt="Print" class="print-icon">
-        Print
+    <!-- PRINT BUTTON – just the PNG, no text, no background, no border -->
+    <button class="print-button" onclick="window.print()" aria-label="Print">
+        <img src="./assets/pngtree-vector-printer-icon-png-image_318079.png" alt="Print" class="print-icon">
     </button>
-    <!-- ===== END PRINT ICON SLOT ===== -->
 
     <div class="resume">
         <!-- LEFT PANEL with hover‑reveal images, full colour -->
