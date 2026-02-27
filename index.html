@@ -45,8 +45,8 @@
             box-shadow: none;
             backdrop-filter: none;
             display: block;
-            border:#333 solid 1px;
-             border-radius: 3px;
+            border: #2f2f2f solid 1px;
+            border-radius: 5px;
         }
 
         .print-button:hover {
@@ -57,8 +57,8 @@
 
         /* ===== PRINT ICON - PURE PNG, NO EXTRA STYLING ===== */
         .print-icon {
-            width: 32px;  /* Adjust this to your preferred size */
-            height: 32px; /* Adjust this to your preferred size */
+            width: 32px;
+            height: 32px;
             display: block;
         }
         /* ===== END PRINT ICON ===== */
@@ -224,7 +224,6 @@
             border: 1px solid #4a4a4a;
             transition: background 0.15s;
             cursor: default;
-            min-height: 59.49px; /* to prevent layout shift when image appears */
         }
 
         .license-item:hover {
@@ -556,13 +555,149 @@
             }
         }
 
+        /* ===== PRINT STYLES - Left panel on page 1, Right panel on page 2 ===== */
         @media print {
-            body { background: none; padding: 0.2in; }
-            .resume { box-shadow: none; border: 1px solid #777; background: white; }
-            .left-panel { background-color: #eee; color: black; }
-            .name { color: black; }
-            .license-img-slot { opacity: 1 !important; border: 1px solid #333; }
-            .overlay, .image-grid, .print-button { display: none; }
+            /* Reset all page margins */
+            @page {
+                margin: 0.75in;
+                size: A4;
+            }
+            
+            /* Hide screen-only elements */
+            body { 
+                background: none; 
+                padding: 0;
+                display: block;
+            }
+            
+            .print-button, .overlay, .image-grid, .grid-item {
+                display: none !important;
+            }
+            
+            /* Force the resume to display as block for printing */
+            .resume {
+                display: block;
+                max-width: 100%;
+                box-shadow: none;
+                border: none;
+                background: white;
+            }
+            
+            /* LEFT PANEL - Page 1 */
+            .left-panel {
+                background-color: #f5f5f5 !important;
+                color: #000000 !important;
+                border-right: none;
+                page-break-after: always;  /* Force page break after left panel */
+                page-break-inside: avoid;
+                min-height: 100vh;
+                padding: 2rem;
+            }
+            
+            /* Make left panel content print-friendly */
+            .left-panel .name {
+                color: #000000 !important;
+            }
+            
+            .left-panel .section-title {
+                color: #333333 !important;
+                border-bottom-color: #999999 !important;
+            }
+            
+            .left-panel .contact-link {
+                color: #333333 !important;
+                border-bottom-color: #999999 !important;
+            }
+            
+            .left-panel .skill-tag {
+                background-color: #e5e5e5 !important;
+                border-color: #999999 !important;
+                color: #000000 !important;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+            
+            .left-panel .license-item {
+                background-color: #e5e5e5 !important;
+                border-color: #999999 !important;
+            }
+            
+            .left-panel .license-name {
+                color: #000000 !important;
+            }
+            
+            .left-panel .license-date {
+                color: #333333 !important;
+            }
+            
+            /* Show license images in print */
+            .license-img-slot {
+                opacity: 1 !important;
+                border: 1px solid #333;
+                background-color: #ffffff;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+            
+            /* RIGHT PANEL - Page 2 */
+            .right-panel {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                page-break-before: always;  /* Start on new page */
+                page-break-after: avoid;
+                min-height: 100vh;
+                padding: 2rem;
+            }
+            
+            /* Make right panel content print-friendly */
+            .right-panel .right-section-title {
+                color: #333333 !important;
+                border-bottom-color: #999999 !important;
+            }
+            
+            .right-panel .summary-text {
+                color: #000000 !important;
+            }
+            
+            .right-panel .exp-role {
+                background-color: #cccccc !important;
+                color: #000000 !important;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+            
+            .right-panel .exp-company {
+                color: #333333 !important;
+            }
+            
+            .right-panel .exp-company-date {
+                color: #666666 !important;
+            }
+            
+            .right-panel .exp-date {
+                background-color: #dddddd !important;
+                color: #000000 !important;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+            
+            .right-panel .exp-desc li {
+                color: #000000 !important;
+            }
+            
+            .right-panel .exp-desc li::before {
+                color: #666666 !important;
+            }
+            
+            hr {
+                border-top-color: #999999 !important;
+            }
+            
+            /* Hide the "updated" text or keep it */
+            .right-panel div[style*="text-align: right"] {
+                color: #666666 !important;
+                border-top-color: #cccccc !important;
+            }
         }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -635,18 +770,25 @@
                         <div class="license-name">Electrical Contractor License</div>
                         <div class="license-date">2025-2030</div>
                     </div>
-                    
+                    <span class="license-img-slot">
+                        <img src="./assets/IMG_2175.jpg" alt="Electrical Contractor License">
+                    </span>
                 </div>
                 <div class="license-item">
                     <div class="license-info">
                         <div class="license-name">NSW White Card</div>
                     </div>
-                  
+                    <span class="license-img-slot">
+                        <img src="./assets/IMG_2359.PNG" alt="NSW White Card">
+                    </span>
                 </div>
                 <div class="license-item">
                      <div class="license-info">
                         <div class="license-name">Drivers License</div>
                     </div>
+                    <span class="license-img-slot">
+                        <img src="./assets/IMG_2358.jpg" alt="P2 Drivers License">
+                    </span>
                 </div>
             </div>
             <div style="margin-top: 1rem;"></div>
@@ -702,7 +844,6 @@
                 <div class="grid-item"><img src="./assets/IMG_2257.PNG" alt="Switchboard assembly"></div>
                 <div class="grid-item"><img src="./assets/IMG_2335 (1).jpg" alt="Switchboard assembly"></div>
                 <div class="grid-item"><img src="./assets/IMG_2256.PNG" alt="Switchboard assembly"></div>
-              
             </div>
             
             <hr>
