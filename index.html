@@ -542,7 +542,7 @@
             }
         }
 
-        /* ===== PRINT STYLES - Three pages: Left panel, Right panel, Gallery ===== */
+        /* ===== UPDATED PRINT STYLES - Two pages: Left panel, Right panel with gallery ===== */
         @media print {
             /* Page settings */
             @page {
@@ -670,14 +670,12 @@
                 color: #333333 !important;
             }
             
-            /* Show license images in print - removed since you removed the image slots */
-            
-            /* RIGHT PANEL - Page 2 */
+            /* RIGHT PANEL - Page 2 (with gallery) */
             .right-panel {
                 background-color: #ffffff !important;
                 color: #000000 !important;
-                page-break-before: always;
-                page-break-after: always; /* Force page break after right panel */
+                /* REMOVED page-break-after: always - gallery now stays on page 2 */
+                page-break-inside: auto;
                 min-height: auto;
                 padding: 0.8rem 1rem;
                 font-size: 10pt;
@@ -757,20 +755,24 @@
                 margin: 0.3rem 0 0.4rem;
             }
             
-            /* Footer text - hide on page 2 since gallery will be on page 3 */
+            /* Footer text - now visible on page 2 */
             .right-panel div[style*="text-align: right"] {
-                display: none;
+                display: block !important;
+                margin-top: 0.8rem !important;
+                font-size: 8pt !important;
+                color: #666666 !important;
+                border-top-color: #999999 !important;
             }
             
-            /* GALLERY PAGE - Page 3 */
+            /* GALLERY - Now on Page 2, after the experience section */
             .grid-section-title {
                 display: block !important;
                 font-size: 14pt !important;
-                margin: 0.5rem 0 0.8rem 0 !important;
+                margin: 1.5rem 0 0.8rem 0 !important; /* Increased top margin for spacing */
                 padding-bottom: 0.2rem !important;
                 color: #333333 !important;
                 border-bottom-color: #999999 !important;
-                page-break-before: always; /* Start gallery on new page */
+                /* REMOVED page-break-before: always - gallery now flows naturally on page 2 */
             }
             
             .image-grid {
@@ -944,7 +946,7 @@
                 </ul>
             </div>
 
-            <!-- PROJECT GALLERY – Will appear on Page 3 in print -->
+            <!-- PROJECT GALLERY – Now appears on Page 2 in print -->
             <div class="grid-section-title">PROJECT GALLERY</div>
             <div class="image-grid" id="projectGrid">
                 <div class="grid-item"><img src="./assets/IMG_1238.jpg" alt="Switchboard assembly"></div>
@@ -995,112 +997,4 @@
                 currentScale = 1;
                 currentOriginX = 50;
                 currentOriginY = 50;
-                overlayImg.style.transformOrigin = `${currentOriginX}% ${currentOriginY}%`;
-                overlayImg.style.transform = `scale(${currentScale})`;
-                clickCount = 0;
-                clickIndicator.textContent = 'clicks: 0';
-            }
-
-            function openOverlay(src, altText) {
-                if (!src) return;
-                overlayImg.src = src;
-                overlayImg.alt = altText || 'enlarged view';
-                overlay.classList.add('active');
-                resetZoom();
-            }
-
-            function getClickOrigin(e) {
-                const rect = overlayImg.getBoundingClientRect();
-                if (rect.width === 0) return { x: 50, y: 50 };
-                
-                let clickX = e.clientX - rect.left;
-                let clickY = e.clientY - rect.top;
-                
-                clickX = Math.max(0, Math.min(rect.width, clickX));
-                clickY = Math.max(0, Math.min(rect.height, clickY));
-                
-                const originX = (clickX / rect.width) * 100;
-                const originY = (clickY / rect.height) * 100;
-                
-                return { x: originX, y: originY };
-            }
-
-            overlayImg.addEventListener('click', function(e) {
-                e.stopPropagation();
-                
-                if (!overlay.classList.contains('active')) return;
-                
-                clickCount++;
-                
-                if (clickCount > 6) clickCount = 1;
-                
-                clickIndicator.textContent = `clicks: ${clickCount}`;
-
-                if (clickCount >= 1 && clickCount <= 3) {
-                    const origin = getClickOrigin(e);
-                    currentOriginX = origin.x;
-                    currentOriginY = origin.y;
-                    
-                    let newScale = currentScale + scaleStep;
-                    if (newScale > maxScale) newScale = maxScale;
-                    
-                    currentScale = newScale;
-                    
-                    overlayImg.style.transformOrigin = `${currentOriginX}% ${currentOriginY}%`;
-                    overlayImg.style.transform = `scale(${currentScale})`;
-                    
-                } else if (clickCount >= 4 && clickCount <= 6) {
-                    currentOriginX = 50;
-                    currentOriginY = 50;
-                    
-                    let newScale = currentScale - scaleStep;
-                    if (newScale < minScale) newScale = minScale;
-                    
-                    currentScale = newScale;
-                    
-                    overlayImg.style.transformOrigin = '50% 50%';
-                    overlayImg.style.transform = `scale(${currentScale})`;
-                }
-                
-                this.style.transition = 'transform 0.1s ease';
-            });
-
-            imgSlots.forEach(slot => {
-                slot.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const innerImg = this.querySelector('img');
-                    if (innerImg) {
-                        openOverlay(innerImg.src, innerImg.alt);
-                    }
-                });
-                slot.style.cursor = 'pointer';
-            });
-
-            gridItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    const innerImg = this.querySelector('img');
-                    if (innerImg && innerImg.src) {
-                        openOverlay(innerImg.src, innerImg.alt);
-                    }
-                });
-            });
-
-            overlay.addEventListener('click', function(e) {
-                if (e.target === overlay || e.target === closeBtn || e.target.closest('#closeOverlayBtn')) {
-                    overlay.classList.remove('active');
-                    overlayImg.src = '';
-                }
-            });
-
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && overlay.classList.contains('active')) {
-                    overlay.classList.remove('active');
-                    overlayImg.src = '';
-                }
-            });
-
-            overlayContent.addEventListener('click', (e) => e.stopPropagation());
-        })();
-    </script>
-</body>
-</html>
+                overlayImg.style.transformOrigin = `${currentOriginX}% ${currentOrigin
